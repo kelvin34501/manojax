@@ -1,0 +1,13 @@
+*.sw*
+*.bak
+*_bak.py
+
+.vscode/
+.cache/
+__pycache__/
+build/
+dist/
+
+mano/models/
+assets/mano_layer.svg
+manojax.egg-info/
