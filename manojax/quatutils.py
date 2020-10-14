@@ -22,14 +22,10 @@ def normalize_quaternion(quaternion: np.ndarray, eps: float = 1e-12) -> np.ndarr
         tensor([0.000, 0.7071, 0.0000, 0.7071])
     """
     if not isinstance(quaternion, np.ndarray):
-        raise TypeError(
-            "Input type is not a np.ndarray. Got {}".format(type(quaternion))
-        )
+        raise TypeError("Input type is not a np.ndarray. Got {}".format(type(quaternion)))
 
     if not quaternion.shape[-1] == 4:
-        raise ValueError(
-            "Input must be a ndarray of shape (*, 4). Got {}".format(quaternion.shape)
-        )
+        raise ValueError("Input must be a ndarray of shape (*, 4). Got {}".format(quaternion.shape))
     quat_norm = np.linalg.norm(quaternion, ord=2, axis=-1, keepdims=True)
     quat_norm = np.clip(quat_norm, eps, None)
     return quaternion / quat_norm
@@ -94,14 +90,10 @@ def quaternion_to_angle_axis(quaternion: np.ndarray) -> np.ndarray:
         >>> angle_axis = kornia.quaternion_to_angle_axis(quaternion)  # Nx3
     """
     if not isinstance(quaternion, np.ndarray):
-        raise TypeError(
-            "Input type is not a np.ndarray. Got {}".format(type(quaternion))
-        )
+        raise TypeError("Input type is not a np.ndarray. Got {}".format(type(quaternion)))
 
     if not quaternion.shape[-1] == 4:
-        raise ValueError(
-            "Input must be a tensor of shape Nx4 or 4. Got {}".format(quaternion.shape)
-        )
+        raise ValueError("Input must be a tensor of shape Nx4 or 4. Got {}".format(quaternion.shape))
     # unpack input and compute conversion
     q1: np.ndarray = quaternion[..., 1]
     q2: np.ndarray = quaternion[..., 2]
@@ -111,9 +103,7 @@ def quaternion_to_angle_axis(quaternion: np.ndarray) -> np.ndarray:
     sin_theta: np.ndarray = np.sqrt(sin_squared_theta)
     cos_theta: np.ndarray = quaternion[..., 0]
     two_theta: np.ndarray = 2.0 * np.where(
-        cos_theta < 0.0,
-        np.arctan2(-sin_theta, -cos_theta),
-        np.arctan2(sin_theta, cos_theta),
+        cos_theta < 0.0, np.arctan2(-sin_theta, -cos_theta), np.arctan2(sin_theta, cos_theta),
     )
 
     k_pos: np.ndarray = two_theta / sin_theta
@@ -148,14 +138,10 @@ def angle_axis_to_quaternion(angle_axis: np.ndarray) -> np.ndarray:
         >>> quaternion = kornia.angle_axis_to_quaternion(angle_axis)  # Nx3
     """
     if not isinstance(angle_axis, np.ndarray):
-        raise TypeError(
-            "Input type is not a np.ndarray. Got {}".format(type(angle_axis))
-        )
+        raise TypeError("Input type is not a np.ndarray. Got {}".format(type(angle_axis)))
 
     if not angle_axis.shape[-1] == 3:
-        raise ValueError(
-            "Input must be a tensor of shape Nx3 or 3. Got {}".format(angle_axis.shape)
-        )
+        raise ValueError("Input must be a tensor of shape Nx3 or 3. Got {}".format(angle_axis.shape))
     # unpack input and compute conversion
     a0: np.ndarray = angle_axis[..., 0:1]
     a1: np.ndarray = angle_axis[..., 1:2]
@@ -216,7 +202,7 @@ def quaternion_to_rotation_matrix(quaternion: np.ndarray) -> np.ndarray:
     zz = z * z
     # compute normalizer
     q_norm_squared = ww + xx + yy + zz  # (*, )
-    q_norm_squared = q_norm_squared.unsqueeze(-1)  # (*, 1) for broadcasting
+    q_norm_squared = np.expand_dims(q_norm_squared, -1)  # (*, 1) for broadcasting
     # stack
     rotation_matrix = np.stack(
         (
@@ -294,14 +280,10 @@ def quaternion_to_angle(quaternion: np.ndarray) -> np.ndarray:
         - Output: :math:`(*)`
     """
     if not isinstance(quaternion, np.ndarray):
-        raise TypeError(
-            "Input type is not a torch.Tensor. Got {}".format(type(quaternion))
-        )
+        raise TypeError("Input type is not a torch.Tensor. Got {}".format(type(quaternion)))
 
     if not quaternion.shape[-1] == 4:
-        raise ValueError(
-            "Input must be a tensor of shape Nx4 or 4. Got {}".format(quaternion.shape)
-        )
+        raise ValueError("Input must be a tensor of shape Nx4 or 4. Got {}".format(quaternion.shape))
     # unpack input and compute conversion
     q1: np.ndarray = quaternion[..., 1]
     q2: np.ndarray = quaternion[..., 2]
@@ -311,9 +293,7 @@ def quaternion_to_angle(quaternion: np.ndarray) -> np.ndarray:
     sin_theta: np.ndarray = np.sqrt(sin_squared_theta)
     cos_theta: np.ndarray = quaternion[..., 0]
     two_theta: np.ndarray = 2.0 * np.where(
-        cos_theta < 0.0,
-        np.arctan2(-sin_theta, -cos_theta),
-        np.arctan2(sin_theta, cos_theta),
+        cos_theta < 0.0, np.arctan2(-sin_theta, -cos_theta), np.arctan2(sin_theta, cos_theta),
     )
 
     return two_theta
