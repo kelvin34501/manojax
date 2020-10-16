@@ -265,7 +265,8 @@ def quaternion_norm_squared(quaternion):
     return np.sum(np.power(quaternion, 2), axis=-1)
 
 
-def quaternion_to_angle(quaternion: np.ndarray) -> np.ndarray:
+# ! deprecated! this function doesn't work as I intended to.
+def __quaternion_to_angle(quaternion: np.ndarray) -> np.ndarray:
     """Convert quaternion vector to angle of rotation.
     The quaternion should be in (w, x, y, z) format.
 
