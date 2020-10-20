@@ -111,8 +111,9 @@ def quaternion_to_angle_axis(quaternion: np.ndarray) -> np.ndarray:
     k_neg: np.ndarray = 2.0 * np.ones_like(sin_theta)
     k: np.ndarray = np.where(sin_squared_theta > 0.0, k_pos, k_neg)
 
-    angle_axis = np.concatenate((np.expand_dims(q1 * k, -1), np.expand_dims(q2 * k, -1), np.expand_dims(q3 * k, -1)),
-                                axis=-1)
+    angle_axis = np.concatenate(
+        (np.expand_dims(q1 * k, -1), np.expand_dims(q2 * k, -1), np.expand_dims(q3 * k, -1)), axis=-1
+    )
     return angle_axis
 
 
