@@ -1,6 +1,7 @@
 # from https://github.com/lixiny/bihand/blob/master/bihand/utils/quatutils.py
 # modify quat format from x,y,z,w to w,x,y,z
 from jax import numpy as np
+import jax.ops as ops
 from termcolor import cprint
 
 
@@ -160,9 +161,9 @@ def angle_axis_to_quaternion(angle_axis: np.ndarray) -> np.ndarray:
     w: np.ndarray = np.where(mask, np.cos(half_theta), ones)
 
     quaternion: np.ndarray = np.zeros_like(angle_axis)
-    quaternion[..., 0:1] += a0 * k
-    quaternion[..., 1:2] += a1 * k
-    quaternion[..., 2:3] += a2 * k
+    quaternion = ops.index_add(quaternion, ops.index[..., 0:1], a0 * k)
+    quaternion = ops.index_add(quaternion, ops.index[..., 1:2], a1 * k)
+    quaternion = ops.index_add(quaternion, ops.index[..., 2:3], a2 * k)
     return np.concatenate([w, quaternion], axis=-1)
 
 
